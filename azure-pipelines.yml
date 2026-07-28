@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   solution: 'Everything.sln'
 
-  imageRepository: 'eshoponweb-web'
+  imageRepository: 'sheshu22/eshoponweb-web'
   dockerRegistryServiceConnection: 'sheshu'
   dockerfilePath: 'src/Web/Dockerfile'
   tag: '$(Build.BuildId)'
