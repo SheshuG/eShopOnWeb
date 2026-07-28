@@ -9,6 +9,15 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  buildConfiguration: 'Release'
+  solution: 'Everything.sln'
+
+  imageRepository: 'eshoponweb-web'
+  dockerRegistryServiceConnection: 'sheshu'
+  dockerfilePath: 'src/Web/Dockerfile'
+  tag: '$(Build.BuildId)'
+
 steps:
 - checkout: self
   clean: true
@@ -60,8 +69,21 @@ steps:
     arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: false
 
-- task: PublishBuildArtifacts@1
+- task: Docker@2
+  displayName: 'Build Docker Image'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
-    publishLocation: 'Container'
+    repository: '$(imageRepository)'
+    command: 'build'
+    Dockerfile: '$(dockerfilePath)'
+    tags: |
+      $(tag)
+      latest
+
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Sheshu'
+    repository: '$(imageRepository)'
+    command: 'push'
+    tags: |
+      $(tag)
+      latest
