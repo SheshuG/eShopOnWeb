@@ -75,11 +75,13 @@ steps:
     repository: '$(imageRepository)'
     command: 'build'
     Dockerfile: '$(dockerfilePath)'
+    buildContext: '$(Build.SourcesDirectory)'
     tags: |
       $(tag)
       latest
 
 - task: Docker@2
+  displayName: 'Push Docker Image'
   inputs:
     containerRegistry: 'Sheshu'
     repository: '$(imageRepository)'
@@ -87,3 +89,4 @@ steps:
     tags: |
       $(tag)
       latest
+
